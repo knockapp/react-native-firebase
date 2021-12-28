@@ -602,8 +602,10 @@ export namespace FirebaseMessagingTypes {
      *     fcmTokens: firebase.firestore.FieldValues.arrayUnion(fcmToken),
      *   });
      * ```
+     *
+     * @param appName The name of the app whose FCM token we want to get.
      */
-    getToken(): Promise<string>;
+    getToken(appName?: string): Promise<string>;
 
     /**
      * Returns wether the root view is headless or not
@@ -623,8 +625,10 @@ export namespace FirebaseMessagingTypes {
      * ```js
      * await firebase.messaging().deleteToken();
      * ```
+     *
+     * @param appName The name of the app whose FCM token we want to remove.
      */
-    deleteToken(): Promise<void>;
+    deleteToken(appName?: String): Promise<void>;
 
     /**
      * When any FCM payload is received, the listener callback is called with a `RemoteMessage`.
