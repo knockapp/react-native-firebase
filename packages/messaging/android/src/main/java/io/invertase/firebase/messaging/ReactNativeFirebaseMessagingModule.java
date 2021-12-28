@@ -29,11 +29,14 @@ import com.facebook.react.bridge.ReadableMap;
 import com.facebook.react.bridge.WritableMap;
 import com.facebook.react.bridge.WritableNativeMap;
 import com.google.android.gms.tasks.Tasks;
+import com.google.firebase.FirebaseApp;
+import com.google.firebase.FirebaseOptions;
 import com.google.firebase.messaging.FirebaseMessaging;
 import com.google.firebase.messaging.RemoteMessage;
 import io.invertase.firebase.common.ReactNativeFirebaseEventEmitter;
 import io.invertase.firebase.common.ReactNativeFirebaseModule;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 public class ReactNativeFirebaseMessagingModule extends ReactNativeFirebaseModule
@@ -53,6 +56,25 @@ public class ReactNativeFirebaseMessagingModule extends ReactNativeFirebaseModul
     WritableMap remoteMessageMap = messagingStore.getFirebaseMessageMap(messageId);
     messagingStore.clearFirebaseMessage(messageId);
     return remoteMessageMap;
+  }
+
+  private FirebaseMessaging getMessagingInstance(String senderId) {
+    if (senderId == null) {
+      return FirebaseMessaging.getInstance();
+    }
+
+    String appName = null;
+
+    List<FirebaseApp> firebaseApps = FirebaseApp.getApps(getReactApplicationContext());
+    for (FirebaseApp app : firebaseApps) {
+      FirebaseOptions appOptions = app.getOptions();
+      if (appOptions.getGcmSenderId().equals(senderId)) {
+        appName = app.getName();
+        break;
+      }
+    }
+
+    return FirebaseApp.getInstance(appName).get(FirebaseMessaging.class);
   }
 
   @ReactMethod
@@ -120,8 +142,8 @@ public class ReactNativeFirebaseMessagingModule extends ReactNativeFirebaseModul
   }
 
   @ReactMethod
-  public void getToken(Promise promise) {
-    Tasks.call(getExecutor(), () -> Tasks.await(FirebaseMessaging.getInstance().getToken()))
+  public void getToken(String senderId, Promise promise) {
+    Tasks.call(getExecutor(), () -> Tasks.await(this.getMessagingInstance(senderId).getToken()))
         .addOnCompleteListener(
             task -> {
               if (task.isSuccessful()) {
@@ -133,11 +155,11 @@ public class ReactNativeFirebaseMessagingModule extends ReactNativeFirebaseModul
   }
 
   @ReactMethod
-  public void deleteToken(Promise promise) {
+  public void deleteToken(String senderId, Promise promise) {
     Tasks.call(
             getExecutor(),
             () -> {
-              Tasks.await(FirebaseMessaging.getInstance().deleteToken());
+              Tasks.await(this.getMessagingInstance(senderId).deleteToken());
               return null;
             })
         .addOnCompleteListener(
