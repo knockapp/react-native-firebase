@@ -153,12 +153,12 @@ class FirebaseMessagingModule extends FirebaseModule {
     return this.native.getIsHeadless();
   }
 
-  getToken() {
-    return this.native.getToken();
+  getToken(appName) {
+    return this.native.getToken(appName);
   }
 
-  deleteToken() {
-    return this.native.deleteToken();
+  deleteToken(appName) {
+    return this.native.deleteToken(appName);
   }
 
   onMessage(listener) {
