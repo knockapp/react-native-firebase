@@ -3,6 +3,13 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [14.2.101](https://github.com/invertase/react-native-firebase/compare/v14.2.0...v14.2.101) (2022-01-06)
+
+### Bug Fixes
+
+- **ios, messaging:** add ios version guard for `UNAuthorizationOptionProvidesAppNotificationSettings` ([#5986](https://github.com/invertase/react-native-firebase/issues/5986)) ([e8922c0](https://github.com/invertase/react-native-firebase/commit/e8922c0a98eb62c52bd25e84a10d30cd93c89db0))
+- **ios, messaging:** serialize google.c.sender.id to message.from ([5538891](https://github.com/invertase/react-native-firebase/commit/5538891fb4a8bea8d0f96701f3e941d8217b905b))
+
 ## [14.2.1](https://github.com/invertase/react-native-firebase/compare/v14.2.0...v14.2.1) (2021-12-31)
 
 **Note:** Version bump only for package @react-native-firebase/messaging
